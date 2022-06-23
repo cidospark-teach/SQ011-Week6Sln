@@ -1,0 +1,52 @@
+﻿@model ListToDisplayViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="my-container">
+    <h1 class="display-4">Todo</h1>
+
+    @if (Model.ListItems.Count > 0)
+    {
+        <form method="get" asp-action="RemoveManyTodoItems" asp-controller="Task" id="frm">
+
+            <div class="btn-rmv rounded-btn" style="position:absolute; top:-50px; left:40px;"><button>Remove Selected Item(s)</button></div>
+
+            @for (int i = 0; i < Model.ListItems.Count; i++)
+            {
+                <div class="item-row">
+                    <div style="display:flex">
+                        <div style="width:15px; margin-right:30px;">
+                            <input asp-for="@Model.ListItems[i].IsSelected" />
+                            <input asp-for="@Model.ListItems[i].Id" hidden />
+                        </div>
+                        <div>
+                            <div>@Model.ListItems[i].Task</div>
+                            <div style="font-size:11px;">
+                                [STATUS: @{
+                                    if (Model.ListItems[i].Completed)
+                                    {
+                                        <span style="color:green">Completed</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="color:red">Not Completed</span>
+                                    }
+                                }] - <span style="color:#999">Is due on @Model.ListItems[i].ExpiresOn</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <a asp-action="EditTask" asp-controller="Task" asp-route-id="@Model.ListItems[i].Id">edit</a>
+                    </div>
+                </div>
+            }
+            
+        </form>
+
+    }
+    else
+    {
+        <div class="text-center"><h1>Todo list is empty!</h1></div>
+    }
+</div>
